@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>可以成为我的恋人吗</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            font-family: 'Dancing Script', cursive;
+            overflow: hidden;
+        }
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .heart {
+            position: absolute;
+            color: #ff3f3f;
+            animation: float 3s linear infinite;
+            opacity: 0;
+        }
+        h1 {
+            position: absolute;
+            top: 15%;
+            font-size: 3.5em;
+            color: #d32f2f;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        button {
+            padding: 20px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin: 0 20px;
+        }
+        #yes {
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+        }
+        #no {
+            background: linear-gradient(45deg, #f44336, #ef5350);
+            color: white;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    <h1>可以和我共度余生吗？💖</h1>
+    
+    <button id="yes" onclick="showLove()">好呀，我愿意！</button>
+    <button id="no" onclick="shrink()">让我再想想...</button>
+    <audio id="sound" src="data:audio/mpeg;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQZDiExCAQYQnQUmCDHAwJ4Qp0EIgyBHAwlABhWQ8lEIgwBHAwlAAZViPJRCIMABHAAZViPJRCAGHAAAAA0AIgwgEgBoAjMABwAABABoTxIhACAAED6AgIAgABAgQIBAgAIGAAQIEAAAAQAAAAAAAAAAAAAAAP/7kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAABIAABLpAAEBQYHCQwNDxETFRcYGh0gISQmKCotMDI1Nzo8PkBCREZHSElMTU9RUlVXWFpdYGFiZGZnaGptcHFzdXh5fH2AgYSFh4iJjI2PkZKVl5ianqChpKWnqKqusLGztbe4ur7AwcTFx8jKztDR1NXX2Nre4OHk5efo6u7w8fT19/j6/v8AAAAATGF2YzU3LjM2AAAAAAy1AQCgSAABLpD4//7kAAAAAAAA" hidden></audio>
+    <script>
+        let scale = 1;
+        let yesSize = 1;
+        
+        // 创建飘落的心形
+        function createHearts() {
+            const hearts = document.getElementById('hearts');
+            for(let i=0; i<20; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                heart.style.left = Math.random()*100 + '%';
+                heart.style.animationDelay = Math.random()*3 + 's';
+                hearts.appendChild(heart);
+            }
+        }
+        // 按钮交互
+        function shrink() {
+            playSound();
+            scale *= 0.8;
+            yesSize *= 1.2;
+            
+            document.getElementById('no').style.transform = `scale(${scale})`;
+            document.getElementById('yes').style.transform = `scale(${yesSize})`;
+            
+            if(yesSize > 6) {
+                document.getElementById('yes').style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 0;
+                    font-size: 3em;
+                    z-index: 999;
+                    animation: heartbeat 1s infinite;
+                `;
+                document.getElementById('no').style.display = "none";
+                createHearts();
+            }
+        }
+        function showLove() {
+            playSound();
+            document.body.innerHTML = `
+                <div style="text-align:center; color:#d32f2f; font-size:4em">
+                    <div style="animation: heartbeat 1s infinite">❤️ 余生请多指教！ ❤️</div>
+                    <div style="font-size:0.5em; margin-top:20px">点击刷新可以重新开始哦~</div>
+                </div>
+            `;
+        }
+        function playSound() {
+            const sound = document.getElementById('sound');
+            sound.currentTime = 0;
+            sound.play();
+        }
+        // 初始化页面时随机设置按钮位置
+        window.onload = function() {
+            document.getElementById('yes').style.transform = `translateY(${Math.random()*20-10}px)`;
+            document.getElementById('no').style.transform = `translateY(${Math.random()*20-10}px)`;
+        }
+    </script>
+</body>
+</html>
